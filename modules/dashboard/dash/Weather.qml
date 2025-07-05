@@ -27,31 +27,34 @@ Item {
 
     Column {
         id: info
-
         anchors.verticalCenter: parent.verticalCenter
         anchors.left: icon.right
         anchors.leftMargin: Appearance.spacing.large
-
         spacing: Appearance.spacing.small
 
         StyledText {
             anchors.horizontalCenter: parent.horizontalCenter
-
             animate: true
-            text: Config.dashboard.useFahrenheit ? Weather.tempF : Weather.tempC
+            text: `${Weather.temperature}°F`
             color: Colours.palette.m3primary
             font.pointSize: Appearance.font.size.extraLarge
             font.weight: 500
         }
-
         StyledText {
             anchors.horizontalCenter: parent.horizontalCenter
-
+            animate: true
+            text: `${Weather.city}`
+            color: Colours.palette.m3secondary
+            font.pointSize: Appearance.font.size.smaller
+            font.weight: 500
+        }
+        StyledText {
+            anchors.horizontalCenter: parent.horizontalCenter
             animate: true
             text: Weather.description || qsTr("No weather")
-
-            elide: Text.ElideRight
-            width: Math.min(implicitWidth, root.parent.width - icon.implicitWidth - info.anchors.leftMargin - Appearance.padding.large * 2)
+            color: Colours.palette.m3secondary
+            font.pointSize: Appearance.font.size.small
+            font.weight: 500
         }
     }
 }

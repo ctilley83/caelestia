@@ -25,7 +25,7 @@ Singleton {
             return c;
         c = Qt.rgba(c.r, c.g, c.b, layer ? transparency.layers : transparency.base);
         if (layer)
-            c.hsvValue = Math.max(0, Math.min(1, c.hslLightness + (light ? -0.2 : 0.2))); // TODO: edit based on colours (hue or smth)
+            c.hsvValue = Math.max(0, Math.min(1, c.hslLightness + -0.2)); // TODO: edit based on colours (hue or smth)
         return c;
     }
 
@@ -43,8 +43,6 @@ Singleton {
             root.scheme = scheme.name;
             flavour = scheme.flavour;
         }
-
-        light = scheme.mode === "light";
 
         for (const [name, colour] of Object.entries(scheme.colours)) {
             const propName = colourNames.includes(name) ? name : `m3${name}`;
@@ -65,7 +63,7 @@ Singleton {
     }
 
     component Transparency: QtObject {
-        readonly property bool enabled: false
+        property bool enabled: false
         readonly property real base: 0.78
         readonly property real layers: 0.58
     }

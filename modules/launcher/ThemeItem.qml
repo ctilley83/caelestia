@@ -5,8 +5,7 @@ import QtQuick
 
 Item {
     id: root
-
-    required property M3Variants.Variant modelData
+    required property var modelData
     required property var list
 
     implicitHeight: Config.launcher.sizes.itemHeight
@@ -30,10 +29,8 @@ Item {
 
         MaterialIcon {
             id: icon
-
             text: root.modelData?.icon ?? ""
             font.pointSize: Appearance.font.size.extraLarge
-
             anchors.verticalCenter: parent.verticalCenter
         }
 
@@ -41,27 +38,22 @@ Item {
             anchors.left: icon.right
             anchors.leftMargin: Appearance.spacing.larger
             anchors.verticalCenter: icon.verticalCenter
-
             implicitWidth: parent.width - icon.width
             implicitHeight: name.implicitHeight + desc.implicitHeight
 
             StyledText {
                 id: name
-
                 text: root.modelData?.name ?? ""
                 font.pointSize: Appearance.font.size.normal
             }
 
             StyledText {
                 id: desc
-
                 text: root.modelData?.description ?? ""
                 font.pointSize: Appearance.font.size.small
                 color: Colours.alpha(Colours.palette.m3outline, true)
-
                 elide: Text.ElideRight
                 width: root.width - icon.width - Appearance.rounding.normal * 2
-
                 anchors.top: name.bottom
             }
         }

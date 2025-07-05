@@ -107,7 +107,7 @@ Row {
         FileDialog {
             id: dialog
 
-            nameFilters: [`Image files (${Wallpapers.extensions.map(e => `*.${e}`).join(" ")})`]
+            nameFilters: [`Image files (${ProfilePictures.extensions.map(e => `*.${e}`).join(" ")})`]
 
             onAccepted: {
                 Paths.copy(selectedFile, `${Paths.home}/.face`);
