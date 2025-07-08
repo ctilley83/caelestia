@@ -15,21 +15,23 @@ ListView {
 
     property bool isAction: search.text.startsWith(Config.launcher.actionPrefix)
     property bool isCalc: search.text.startsWith(`${Config.launcher.actionPrefix}calc `)
-    property bool isTheme: search.text.startsWith(`${Config.launcher.actionPrefix}theme `)
+    property bool isScheme: search.text.startsWith(`${Config.launcher.actionPrefix}scheme `)
+    property bool isVariant: search.text.startsWith(`${Config.launcher.actionPrefix}variant `)
 
     function getModelValues() {
         let text = search.text;
         if (isCalc)
             return [0];
-        if (isTheme)
-            return Themes.list;
+        if (isScheme)
+            return Schemes.fuzzyQuery(text);
+        if (isVariant)
+            return M3Variants.fuzzyQuery(text);
         if (isAction)
             return Actions.fuzzyQuery(text);
         if (text.startsWith(Config.launcher.actionPrefix))
             text = search.text.slice(Config.launcher.actionPrefix.length);
         return Apps.fuzzyQuery(text);
     }
-
 
     model: ScriptModel {
         values: root.getModelValues()
@@ -52,8 +54,10 @@ ListView {
     delegate: {
         if (isCalc)
             return calcItem;
-        if (isTheme)
-            return themeItem;
+        if (isScheme)
+            return schemeItem;
+        if (isVariant)
+            return variantItem;
         if (isAction)
             return actionItem;
         return appItem;
@@ -133,9 +137,17 @@ ListView {
     }
 
     Component {
-        id: themeItem
+        id: schemeItem
 
-        ThemeItem {
+        SchemeItem {
+            list: root
+        }
+    }
+
+    Component {
+        id: variantItem
+
+        VariantItem {
             list: root
         }
     }
@@ -148,7 +160,11 @@ ListView {
         ChangeAnim {}
     }
 
-    Behavior on isTheme {
+    Behavior on isScheme {
+        ChangeAnim {}
+    }
+
+    Behavior on isVariant {
         ChangeAnim {}
     }
 

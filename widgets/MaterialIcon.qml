@@ -3,7 +3,7 @@ import "root:/config"
 
 StyledText {
     property real fill
-    property int grade: -25
+    property int grade: Colours.light ? 0 : -25
 
     font.family: Appearance.font.family.material
     font.pointSize: Appearance.font.size.larger

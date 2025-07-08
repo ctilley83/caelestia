@@ -15,13 +15,15 @@ Item {
     required property TextField search
     required property int padding
     required property int rounding
-    readonly property Item currentList: appList.item
+
+    readonly property bool showWallpapers: search.text.startsWith(`${Config.launcher.actionPrefix}wallpaper `)
+    readonly property Item currentList: showWallpapers ? wallpaperList.item : appList.item
 
     anchors.horizontalCenter: parent.horizontalCenter
     anchors.bottom: parent.bottom
 
     clip: true
-    state: "apps"
+    state: showWallpapers ? "wallpapers" : "apps"
 
     states: [
         State {
@@ -36,6 +38,15 @@ Item {
             AnchorChanges {
                 anchors.left: root.parent.left
                 anchors.right: root.parent.right
+            }
+        },
+        State {
+            name: "wallpapers"
+
+            PropertyChanges {
+                root.implicitWidth: Math.max(Config.launcher.sizes.itemWidth * 1.2, wallpaperList.implicitWidth)
+                root.implicitHeight: Config.launcher.sizes.wallpaperHeight
+                wallpaperList.active: true
             }
         }
     ]
@@ -76,6 +87,76 @@ Item {
         sourceComponent: AppList {
             search: root.search
             visibilities: root.visibilities
+        }
+    }
+
+    Loader {
+        id: wallpaperList
+
+        active: false
+        asynchronous: true
+
+        anchors.top: parent.top
+        anchors.bottom: parent.bottom
+        anchors.horizontalCenter: parent.horizontalCenter
+
+        sourceComponent: WallpaperList {
+            search: root.search
+            visibilities: root.visibilities
+        }
+    }
+
+    Row {
+        id: empty
+
+        opacity: root.currentList?.count === 0 ? 1 : 0
+        scale: root.currentList?.count === 0 ? 1 : 0.5
+
+        spacing: Appearance.spacing.normal
+        padding: Appearance.padding.large
+
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.verticalCenter: parent.verticalCenter
+
+        MaterialIcon {
+            text: root.state === "wallpapers" ? "wallpaper_slideshow" : "manage_search"
+            color: Colours.palette.m3onSurfaceVariant
+            font.pointSize: Appearance.font.size.extraLarge
+
+            anchors.verticalCenter: parent.verticalCenter
+        }
+
+        Column {
+            anchors.verticalCenter: parent.verticalCenter
+
+            StyledText {
+                text: root.state === "wallpapers" ? qsTr("No wallpapers found") : qsTr("No results")
+                color: Colours.palette.m3onSurfaceVariant
+                font.pointSize: Appearance.font.size.larger
+                font.weight: 500
+            }
+
+            StyledText {
+                text: root.state === "wallpapers" && Wallpapers.list.length === 0 ? qsTr("Try putting some wallpapers in %1").arg(Paths.shortenHome(Config.paths.wallpaperDir)) : qsTr("Try searching for something else")
+                color: Colours.palette.m3onSurfaceVariant
+                font.pointSize: Appearance.font.size.normal
+            }
+        }
+
+        Behavior on opacity {
+            NumberAnimation {
+                duration: Appearance.anim.durations.normal
+                easing.type: Easing.BezierSpline
+                easing.bezierCurve: Appearance.anim.curves.standard
+            }
+        }
+
+        Behavior on scale {
+            NumberAnimation {
+                duration: Appearance.anim.durations.normal
+                easing.type: Easing.BezierSpline
+                easing.bezierCurve: Appearance.anim.curves.standard
+            }
         }
     }
 

@@ -10,9 +10,9 @@ Singleton {
 
     property string loc
     property string icon
-    property string city
     property string description
-    property real temperature
+    property string tempC: "0°C"
+    property string tempF: "0°F"
 
     function reload(): void {
         if (Config.dashboard.weatherLocation)
@@ -25,13 +25,11 @@ Singleton {
     }
 
     onLocChanged: Requests.get(`https://wttr.in/${loc}?format=j1`, text => {
-        const jsonWeatherData = JSON.parse(text).current_condition[0];
-        const jsonNearestArea = JSON.parse(text).nearest_area[0];
-        icon = Icons.getWeatherIcon(jsonWeatherData.weatherCode);
-        description = jsonWeatherData.weatherDesc[0].value;
-        temperature = parseFloat(jsonWeatherData.temp_F);
-        city = jsonNearestArea.areaName[0].value;
-        console.log(city)
+        const json = JSON.parse(text).current_condition[0];
+        icon = Icons.getWeatherIcon(json.weatherCode);
+        description = json.weatherDesc[0].value;
+        tempC = `${parseFloat(json.temp_C)}°C`;
+        tempF = `${parseFloat(json.temp_F)}°F`;
     })
 
     Component.onCompleted: reload()

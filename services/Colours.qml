@@ -25,7 +25,7 @@ Singleton {
             return c;
         c = Qt.rgba(c.r, c.g, c.b, layer ? transparency.layers : transparency.base);
         if (layer)
-            c.hsvValue = Math.max(0, Math.min(1, c.hslLightness + -0.2)); // TODO: edit based on colours (hue or smth)
+            c.hsvValue = Math.max(0, Math.min(1, c.hslLightness + (light ? -0.2 : 0.2))); // TODO: edit based on colours (hue or smth)
         return c;
     }
 
@@ -44,6 +44,8 @@ Singleton {
             flavour = scheme.flavour;
         }
 
+        light = scheme.mode === "light";
+
         for (const [name, colour] of Object.entries(scheme.colours)) {
             const propName = colourNames.includes(name) ? name : `m3${name}`;
             if (colours.hasOwnProperty(propName))
@@ -56,14 +58,14 @@ Singleton {
     }
 
     FileView {
-        path: `${Paths.state}/scheme.json`
+        path: `${Paths.stringify(Paths.state)}/scheme.json`
         watchChanges: true
         onFileChanged: reload()
         onLoaded: root.load(text(), false)
     }
 
     component Transparency: QtObject {
-        property bool enabled: false
+        readonly property bool enabled: false
         readonly property real base: 0.78
         readonly property real layers: 0.58
     }

@@ -81,19 +81,12 @@ Item {
             anchors.top: parent.top
             anchors.topMargin: Appearance.padding.large
         }
-        Transparency {
-            id: transparency
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.top: osIcon.bottom
-            anchors.topMargin: Appearance.padding.large
-            anchors.bottomMargin: Appearance.padding.large
 
-        }
         StyledRect {
             id: workspaces
 
             anchors.horizontalCenter: parent.horizontalCenter
-            anchors.top: transparency.bottom
+            anchors.top: osIcon.bottom
             anchors.topMargin: Appearance.spacing.normal
 
             radius: Appearance.rounding.full

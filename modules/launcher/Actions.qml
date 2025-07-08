@@ -22,24 +22,61 @@ Singleton {
                 root.autocomplete(list, "calc");
             }
         },
-
         Action {
-            name: qsTr("Theme")
-            desc: qsTr("Change the current theme")
+            name: qsTr("Scheme")
+            desc: qsTr("Change the current colour scheme")
+            icon: "palette"
+
+            function onClicked(list: AppList): void {
+                root.autocomplete(list, "scheme");
+            }
+        },
+        Action {
+            name: qsTr("Wallpaper")
+            desc: qsTr("Change the current wallpaper")
+            icon: "image"
+
+            function onClicked(list: AppList): void {
+                root.autocomplete(list, "wallpaper");
+            }
+        },
+        Action {
+            name: qsTr("Variant")
+            desc: qsTr("Change the current scheme variant")
             icon: "colors"
 
             function onClicked(list: AppList): void {
-                root.autocomplete(list, "theme");
+                root.autocomplete(list, "variant");
             }
         },
         Action {
             name: qsTr("Transparency")
             desc: qsTr("Change shell transparency")
             icon: "opacity"
-            disabled: false
+            disabled: true
 
             function onClicked(list: AppList): void {
                 root.autocomplete(list, "transparency");
+            }
+        },
+        Action {
+            name: qsTr("Light")
+            desc: qsTr("Change the scheme to light mode")
+            icon: "light_mode"
+
+            function onClicked(list: AppList): void {
+                list.visibilities.launcher = false;
+                Colours.setMode("light");
+            }
+        },
+        Action {
+            name: qsTr("Dark")
+            desc: qsTr("Change the scheme to dark mode")
+            icon: "dark_mode"
+
+            function onClicked(list: AppList): void {
+                list.visibilities.launcher = false;
+                Colours.setMode("dark");
             }
         },
         Action {
