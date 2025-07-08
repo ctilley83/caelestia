@@ -1,15 +1,17 @@
 import "root:/widgets"
 import "root:/services"
 import "root:/config"
+import Quickshell
 import QtQuick
 
 Item {
     id: root
-    required property var modelData
+
+    // No need to refer to Themes.Theme — it's just a plain QtObject
+    required property QtObject modelData
     required property var list
 
     implicitHeight: Config.launcher.sizes.itemHeight
-
     anchors.left: parent?.left
     anchors.right: parent?.right
 
@@ -38,6 +40,7 @@ Item {
             anchors.left: icon.right
             anchors.leftMargin: Appearance.spacing.larger
             anchors.verticalCenter: icon.verticalCenter
+
             implicitWidth: parent.width - icon.width
             implicitHeight: name.implicitHeight + desc.implicitHeight
 

@@ -80,16 +80,11 @@ Item {
             onAccepted: {
                 const currentItem = list.currentList?.currentItem;
                 if (currentItem) {
-                    if (list.showWallpapers) {
-                        if (Colours.scheme === "dynamic" && currentItem.modelData.path !== Wallpapers.actualCurrent)
-                            Wallpapers.previewColourLock = true;
-                        Wallpapers.setWallpaper(currentItem.modelData.path);
-                        root.visibilities.launcher = false;
-                    } else if (text.startsWith(Config.launcher.actionPrefix)) {
-                        if (text.startsWith(`${Config.launcher.actionPrefix}calc `))
+                    if (text.startsWith(Config.launcher.actionPrefix)) {
+                        if (text.startsWith(Config.launcher.actionPrefix + "calc "))
                             currentItem.onClicked();
                         else
-                            currentItem.modelData.onClicked(list.currentList);
+                        currentItem.modelData.onClicked(list.currentList);
                     } else {
                         Apps.launch(currentItem.modelData);
                         root.visibilities.launcher = false;

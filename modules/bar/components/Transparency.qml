@@ -20,6 +20,7 @@ MaterialIcon {
         radius: Appearance.rounding.full
 
         function onClicked(): void {
-            Colours.transparency.enabled = !Colours.transparency.enabled        }
+            Colours.transparency.enabled = !Colours.transparency.enabled
+        }
     }
 }

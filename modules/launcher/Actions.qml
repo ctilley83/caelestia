@@ -22,61 +22,14 @@ Singleton {
                 root.autocomplete(list, "calc");
             }
         },
-        Action {
-            name: qsTr("Scheme")
-            desc: qsTr("Change the current colour scheme")
-            icon: "palette"
 
-            function onClicked(list: AppList): void {
-                root.autocomplete(list, "scheme");
-            }
-        },
         Action {
-            name: qsTr("Wallpaper")
-            desc: qsTr("Change the current wallpaper")
-            icon: "image"
-
-            function onClicked(list: AppList): void {
-                root.autocomplete(list, "wallpaper");
-            }
-        },
-        Action {
-            name: qsTr("Variant")
-            desc: qsTr("Change the current scheme variant")
+            name: qsTr("Theme")
+            desc: qsTr("Change the current theme")
             icon: "colors"
 
             function onClicked(list: AppList): void {
-                root.autocomplete(list, "variant");
-            }
-        },
-        Action {
-            name: qsTr("Transparency")
-            desc: qsTr("Change shell transparency")
-            icon: "opacity"
-            disabled: true
-
-            function onClicked(list: AppList): void {
-                root.autocomplete(list, "transparency");
-            }
-        },
-        Action {
-            name: qsTr("Light")
-            desc: qsTr("Change the scheme to light mode")
-            icon: "light_mode"
-
-            function onClicked(list: AppList): void {
-                list.visibilities.launcher = false;
-                Colours.setMode("light");
-            }
-        },
-        Action {
-            name: qsTr("Dark")
-            desc: qsTr("Change the scheme to dark mode")
-            icon: "dark_mode"
-
-            function onClicked(list: AppList): void {
-                list.visibilities.launcher = false;
-                Colours.setMode("dark");
+                root.autocomplete(list, "theme ");
             }
         },
         Action {
@@ -135,30 +88,30 @@ Singleton {
     ]
 
     readonly property list<var> preppedActions: list.filter(a => !a.disabled).map(a => ({
-                name: Fuzzy.prepare(a.name),
-                desc: Fuzzy.prepare(a.desc),
-                action: a
-            }))
+        name: Fuzzy.prepare(a.name),
+        desc: Fuzzy.prepare(a.desc),
+        action: a
+    }))
 
     function fuzzyQuery(search: string): var {
         return Fuzzy.go(search.slice(Config.launcher.actionPrefix.length), preppedActions, {
-            all: true,
-            keys: ["name", "desc"],
-            scoreFn: r => r[0].score > 0 ? r[0].score * 0.9 + r[1].score * 0.1 : 0
-        }).map(r => r.obj.action);
-    }
+        all: true,
+        keys: ["name", "desc"],
+        scoreFn: r => r[0].score > 0 ? r[0].score * 0.9 + r[1].score * 0.1 : 0
+    }).map(r => r.obj.action);
+}
 
-    function autocomplete(list: AppList, text: string): void {
-        list.search.text = `${Config.launcher.actionPrefix}${text} `;
-    }
+function autocomplete(list: AppList, text: string): void {
+    list.search.text = `${Config.launcher.actionPrefix}${text}` ;
+}
 
-    component Action: QtObject {
-        required property string name
-        required property string desc
-        required property string icon
-        property bool disabled
+component Action: QtObject {
+    required property string name
+    required property string desc
+    required property string icon
+    property bool disabled
 
-        function onClicked(list: AppList): void {
-        }
+    function onClicked(list: AppList): void {
     }
+}
 }

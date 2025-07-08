@@ -9,67 +9,70 @@ import QtQuick
 Singleton {
     id: root
 
-    readonly property list<string> colourNames: ["rosewater", "flamingo", "pink", "mauve", "red", "maroon", "peach", "yellow", "green", "teal", "sky", "sapphire", "blue", "lavender"]
+    readonly property list<string> colourNames: [
+        "rosewater", "flamingo", "pink", "mauve", "red", "maroon", "peach",
+        "yellow", "green", "teal", "sky", "sapphire", "blue", "lavender"
+    ]
 
     property bool showPreview
     property string scheme
     property string flavour
     property bool light
+
     readonly property Colours palette: showPreview ? preview : current
     readonly property Colours current: Colours {}
     readonly property Colours preview: Colours {}
     readonly property Transparency transparency: Transparency {}
 
-    function alpha(c: color, layer: bool): color {
+    function alpha(c, layer) {
         if (!transparency.enabled)
             return c;
-        c = Qt.rgba(c.r, c.g, c.b, layer ? transparency.layers : transparency.base);
-        if (layer)
-            c.hsvValue = Math.max(0, Math.min(1, c.hslLightness + (light ? -0.2 : 0.2))); // TODO: edit based on colours (hue or smth)
-        return c;
+        return Qt.rgba(c.r, c.g, c.b, layer ? transparency.layers : transparency.base);
     }
 
-    function on(c: color): color {
-        if (c.hslLightness < 0.5)
-            return Qt.hsla(c.hslHue, c.hslSaturation, 0.9, 1);
-        return Qt.hsla(c.hslHue, c.hslSaturation, 0.1, 1);
+    function on(c) {
+        return c.hslLightness < 0.5 ? Qt.hsla(c.hslHue, c.hslSaturation, 0.9, 1)
+            : Qt.hsla(c.hslHue, c.hslSaturation, 0.1, 1);
     }
 
-    function load(data: string, isPreview: bool): void {
-        const colours = isPreview ? preview : current;
-        const scheme = JSON.parse(data);
+    function applyThemeFromJson(jsonFilePath) {
+        console.log(`Applying theme from JSON: ${jsonFilePath}`);
 
-        if (!isPreview) {
-            root.scheme = scheme.name;
-            flavour = scheme.flavour;
+        if (!Io.exists(jsonFilePath)) {
+            console.warn(`Theme JSON not found: ${jsonFilePath}`);
+            return;
         }
 
-        light = scheme.mode === "light";
+        const themeData = JSON.parse(Io.readText(jsonFilePath));
 
-        for (const [name, colour] of Object.entries(scheme.colours)) {
-            const propName = colourNames.includes(name) ? name : `m3${name}`;
-            if (colours.hasOwnProperty(propName))
-                colours[propName] = `#${colour}`;
+        for (const key in themeData) {
+            if (current.hasOwnProperty(key)) {
+                current[key] = themeData[key];
+            }
         }
-    }
 
-    function setMode(mode: string): void {
-        Quickshell.execDetached(["caelestia", "scheme", "set", "--notify", "-m", mode]);
+        console.log("Theme applied successfully.");
     }
 
     FileView {
-        path: `${Paths.stringify(Paths.state)}/scheme.json`
+        path: `${Paths.state}/theme.json`
         watchChanges: true
         onFileChanged: reload()
-        onLoaded: root.load(text(), false)
+        onLoaded: {
+            const data = text();
+            if (data) {
+                const themeObj = JSON.parse(data);
+                if (themeObj?.path)
+                    root.applyThemeFromJson(themeObj.path);
+            }
+        }
     }
 
     component Transparency: QtObject {
-        readonly property bool enabled: false
+        property bool enabled: false
         readonly property real base: 0.78
         readonly property real layers: 0.58
     }
-
     component Colours: QtObject {
         property color m3primary_paletteKeyColor: "#7870AB"
         property color m3secondary_paletteKeyColor: "#78748A"

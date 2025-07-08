@@ -21,6 +21,5 @@ Variants {
         anchors.left: true
         anchors.right: true
 
-        Wallpaper {}
     }
 }
