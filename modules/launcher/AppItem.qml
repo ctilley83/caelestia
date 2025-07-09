@@ -62,8 +62,7 @@ Item {
                 font.pointSize: Appearance.font.size.small
                 color: Colours.alpha(Colours.palette.m3outline, true)
                 elide: Text.ElideRight
-                width: rm3surfaceBrightoot.width - icon.width - Appearance.rounding.normal * 2
-
+                width: root.width - icon.width - Appearance.rounding.normal * 2
                 anchors.top: name.bottom
             }
         }
