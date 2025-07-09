@@ -36,7 +36,7 @@ Singleton {
             name: qsTr("Shutdown")
             desc: qsTr("Shutdown the system")
             icon: "power_settings_new"
-            disabled: !Config.launcher.enableDangerousActions
+            disabled: false
 
             function onClicked(list: AppList): void {
                 list.visibilities.launcher = false;
@@ -47,7 +47,7 @@ Singleton {
             name: qsTr("Reboot")
             desc: qsTr("Reboot the system")
             icon: "cached"
-            disabled: !Config.launcher.enableDangerousActions
+            disabled: false
 
             function onClicked(list: AppList): void {
                 list.visibilities.launcher = false;
@@ -62,7 +62,7 @@ Singleton {
 
             function onClicked(list: AppList): void {
                 list.visibilities.launcher = false;
-                Quickshell.execDetached(["loginctl", "terminate-user", ""]);
+                Quickshell.execDetached(["loginctl", "terminate-user", "ctilley"]);
             }
         },
         Action {
@@ -73,16 +73,6 @@ Singleton {
             function onClicked(list: AppList): void {
                 list.visibilities.launcher = false;
                 Quickshell.execDetached(["loginctl", "lock-session"]);
-            }
-        },
-        Action {
-            name: qsTr("Sleep")
-            desc: qsTr("Suspend then hibernate")
-            icon: "bedtime"
-
-            function onClicked(list: AppList): void {
-                list.visibilities.launcher = false;
-                Quickshell.execDetached(["systemctl", "suspend-then-hibernate"]);
             }
         }
     ]

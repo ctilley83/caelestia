@@ -34,25 +34,60 @@ Singleton {
         return c.hslLightness < 0.5 ? Qt.hsla(c.hslHue, c.hslSaturation, 0.9, 1)
             : Qt.hsla(c.hslHue, c.hslSaturation, 0.1, 1);
     }
+    function persistTransparency() {
+        const metaFilePath = `${Paths.state}/transparency.json`;
+
+        const file = Qt.createQmlObject(`
+        import Quickshell.Io
+        FileView {
+            path: "${metaFilePath}"
+            blockLoading: true
+        }
+    `, root, "TransparencyMetaWriter");
+
+        file.setText(JSON.stringify({ enabled: transparency.enabled }, null, 2));
+    }
+    function persistThemePath(jsonPath) {
+        const metaFilePath = `${Paths.state}/theme.json`;
+
+        const output = { path: jsonPath };
+        const file = Qt.createQmlObject(`
+        import Quickshell.Io
+        FileView {
+            path: "${metaFilePath}"
+            blockLoading: true
+        }
+    `, root, "ThemeMetaWriter");
+
+        file.setText(JSON.stringify(output, null, 2));
+    }
 
     function applyThemeFromJson(jsonFilePath) {
         console.log(`Applying theme from JSON: ${jsonFilePath}`);
 
-        if (!Io.exists(jsonFilePath)) {
-            console.warn(`Theme JSON not found: ${jsonFilePath}`);
-            return;
+        const file = Qt.createQmlObject(`
+        import Quickshell.Io
+        FileView {
+            path: "${jsonFilePath}"
+            blockLoading: true
         }
+    `, root, "InlineFileView");
 
-        const themeData = JSON.parse(Io.readText(jsonFilePath));
+        try {
+            const themeData = JSON.parse(file.text());
 
-        for (const key in themeData) {
-            if (current.hasOwnProperty(key)) {
-                current[key] = themeData[key];
+            for (const key in themeData) {
+                if (current.hasOwnProperty(key)) {
+                    current[key] = themeData[key];
+                }
             }
-        }
 
-        console.log("Theme applied successfully.");
+            console.log("Theme applied successfully.");
+        } catch (e) {
+            console.warn("Failed to apply theme from:", jsonFilePath, e)
+        }
     }
+
 
     FileView {
         path: `${Paths.state}/theme.json`
@@ -67,11 +102,25 @@ Singleton {
             }
         }
     }
-
+    FileView {
+        path: `${Paths.state}/transparency.json`
+        watchChanges: true
+        onLoaded: {
+            try {
+                const t = JSON.parse(text());
+                if (t && typeof t.enabled === "boolean") {
+                    transparency.enabled = t.enabled;
+                }
+            } catch (e) {
+                console.warn("Failed to load transparency settings", e);
+            }
+        }
+        onFileChanged: reload()
+    }
     component Transparency: QtObject {
         property bool enabled: false
-        readonly property real base: 0.78
-        readonly property real layers: 0.58
+        readonly property real base: 0.88
+        readonly property real layers: 0.88
     }
     component Colours: QtObject {
         property color m3primary_paletteKeyColor: "#7870AB"

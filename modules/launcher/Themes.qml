@@ -3,6 +3,7 @@ import "root:/utils/scripts/fuzzysort.js" as Fuzzy
 import "root:/config"
 import "root:/services"
 import Quickshell
+import Quickshell.Io
 import QtQuick
 
 Singleton {
@@ -13,13 +14,55 @@ Singleton {
             theme: "Gruvbox.json"
             icon: "palette"
             name: "Gruvbox"
-            description: "Classic Gruvbox colour scheme"
+            description: "Classic Gruvbox colour scheme which has some lameness to it"
         },
         Theme {
             theme: "Lcars.json"
             icon: "palette"
             name: "LCARS"
             description: "Star Trek LCARS-inspired interface"
+        },
+        Theme {
+            theme: "Klingon.json"
+            icon: "palette"
+            name: "Klingon"
+            description: "Bloody yet somehow still honorable"
+        },
+        Theme {
+            theme: "FerengiDelight.json"
+            icon: "palette"
+            name: "Ferengi Delight"
+            description: "I went with gold because it's cheaper than latinum"
+        },
+        Theme {
+            theme: "AmberIce.json"
+            icon: "palette"
+            name: "Amber Ice"
+            description: "It's iced out.. Plus its got snow man!"
+        },
+        Theme {
+            theme: "MidnightMetro.json"
+            icon: "palette"
+            name: "Midnight Metro"
+            description: "Dark and neon, just like the metro at night"
+        },
+        Theme {
+            theme: "SolarStrike.json"
+            icon: "palette"
+            name: "Solar Strike"
+            description: "You know wages suck when even the sun is on strike"
+        },
+        Theme {
+            theme: "ObsidianRose.json"
+            icon: "palette"
+            name: "Obsidian Rose"
+            description: "Idk, its got bright rosey stuff in it"
+        },
+        Theme {
+            theme: "DeepCurrent.json"
+            icon: "palette"
+            name: "Deep Current"
+            description: "Deep enough to crush a carbon fiber submarine"
         }
     ]
 
@@ -49,9 +92,9 @@ component Theme: QtObject {
         console.log(`Theme selected: ${theme}`);
         list.visibilities.launcher = false;
 
-        // Load theme via JSON path, resolving relative path
         const resolvedPath = Qt.resolvedUrl(`root:/themes/${theme}`);
         Colours.applyThemeFromJson(resolvedPath);
+        Colours.persistThemePath(resolvedPath);
     }
 }
 }

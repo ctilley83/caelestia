@@ -61,9 +61,8 @@ Item {
                 text: (root.modelData?.comment || root.modelData?.genericName || root.modelData?.name) ?? ""
                 font.pointSize: Appearance.font.size.small
                 color: Colours.alpha(Colours.palette.m3outline, true)
-
                 elide: Text.ElideRight
-                width: root.width - icon.width - Appearance.rounding.normal * 2
+                width: rm3surfaceBrightoot.width - icon.width - Appearance.rounding.normal * 2
 
                 anchors.top: name.bottom
             }
