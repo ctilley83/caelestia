@@ -1,6 +1,7 @@
 import "root:/widgets"
 import "root:/services"
 import "root:/config"
+import "root:/modules/bar/components/workspaces" as WorkspaceModules
 import QtQuick
 import QtQuick.Effects
 
@@ -38,7 +39,12 @@ StyledRect {
     onCurrentWsIdxChanged: {
         lastWs = cWs;
         cWs = currentWsIdx;
+
+        let wsId = Hyprland.activeWsId;
+        let wallpaper = WorkspaceModules.Hyprpaper.getWallpaper(wsId)
+        Hyprland.dispatch(`exec hyprctl hyprpaper wallpaper 'DP-4,${wallpaper}'`);
     }
+
 
     clip: true
     x: 1

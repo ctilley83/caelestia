@@ -190,7 +190,7 @@ All configuration options are in `~/.config/caelestia/shell.json`.
     },
     "paths": {
         "mediaGif": "root:/assets/bongocat.gif",
-        "sessionGif": "root:/assets/kurukuru.gif",
+        "sessionGif": "root:/assets/side_image.png",
         "wallpaperDir": "~/Pictures/Wallpapers"
     },
     "session": {

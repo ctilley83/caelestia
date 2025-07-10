@@ -1,8 +1,7 @@
+pragma Singleton
 import QtQuick
 
 QtObject {
-    id: hyprpaperManager
-
     property var wallpapers: ({
         1: "~/.config/hypr/HyprPaper/enterprise_in_nebula.jpg",
         2: "~/.config/hypr/HyprPaper/cartoon_star_trek.png",
