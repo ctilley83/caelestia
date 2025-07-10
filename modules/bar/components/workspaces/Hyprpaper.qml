@@ -1,14 +1,39 @@
-pragma Singleton
 import QtQuick
+import Quickshell.Io
 
-QtObject {
-    property var wallpapers: ({
-        1: "~/.config/hypr/HyprPaper/enterprise_in_nebula.jpg",
-        2: "~/.config/hypr/HyprPaper/cartoon_star_trek.png",
-        3: "~/.config/hypr/HyprPaper/USS_Mosher.png",
-        4: "~/.config/hypr/HyprPaper/trek_yourself.jpg",
-        5: "~/.config/hypr/HyprPaper/blue_star_trek.jpg"
-    })
+pragma Singleton
+
+Item {
+    id: root
+
+    property var wallpapers: ({})
+
+    FileView {
+        id: configFile
+        path: "/home/ctilley/.config/hypr/hyprpaper.conf"
+        watchChanges: true
+
+        onLoaded: parseConfig()
+        onFileChanged: reload()
+    }
+
+    function parseConfig() {
+        const lines = configFile.text().split(/\r?\n/);
+        let index = 1;
+        const newWallpapers = {};
+
+        for (let line of lines) {
+            line = line.trim();
+            if (line.startsWith("preload")) {
+                const match = line.match(/^preload\s*=\s*(.+)$/);
+                if (match)
+                    newWallpapers[index++] = match[1].trim();
+            }
+        }
+
+        wallpapers = newWallpapers;
+        console.log("Loaded wallpapers:", JSON.stringify(wallpapers));
+    }
 
     function getWallpaper(wsId) {
         return wallpapers[wsId] || wallpapers[1];

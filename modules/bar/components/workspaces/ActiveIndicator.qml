@@ -36,12 +36,21 @@ StyledRect {
         return y;
     }
 
-    onCurrentWsIdxChanged: {
-        lastWs = cWs;
+    Component.onCompleted: {
         cWs = currentWsIdx;
+        lastWs = cWs;
+        updateWallpaperForCurrentWorkspace();
+    }
 
-        let wsId = Hyprland.activeWsId;
-        let wallpaper = WorkspaceModules.Hyprpaper.getWallpaper(wsId)
+    onCurrentWsIdxChanged: {
+        cWs = currentWsIdx;
+        lastWs = cWs;
+        updateWallpaperForCurrentWorkspace();
+    }
+
+    function updateWallpaperForCurrentWorkspace() {
+        const wsId = cWs + 1;
+        const wallpaper = WorkspaceModules.Hyprpaper.getWallpaper(wsId);
         Hyprland.dispatch(`exec hyprctl hyprpaper wallpaper 'DP-4,${wallpaper}'`);
     }
 
