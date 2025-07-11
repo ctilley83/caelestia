@@ -210,8 +210,6 @@ Singleton {
             return "restart_alt";
         if (summary.includes("recording"))
             return "screen_record";
-        if (summary.includes("battery"))
-            return "power";
         if (summary.includes("screenshot"))
             return "screenshot_monitor";
         if (summary.includes("welcome"))

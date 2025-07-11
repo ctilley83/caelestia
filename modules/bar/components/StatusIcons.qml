@@ -14,11 +14,10 @@ Item {
     readonly property Item network: network
     readonly property real bs: bluetooth.y
     readonly property real be: repeater.count > 0 ? devices.y + devices.implicitHeight : bluetooth.y + bluetooth.implicitHeight
-    readonly property Item battery: battery
 
     clip: true
-    implicitWidth: Math.max(network.implicitWidth, bluetooth.implicitWidth, devices.implicitWidth, battery.implicitWidth)
-    implicitHeight: network.implicitHeight + bluetooth.implicitHeight + bluetooth.anchors.topMargin + (repeater.count > 0 ? devices.implicitHeight + devices.anchors.topMargin : 0) + battery.implicitHeight + battery.anchors.topMargin
+    implicitWidth: Math.max(network.implicitWidth, bluetooth.implicitWidth, devices.implicitWidth)
+    implicitHeight: network.implicitHeight + bluetooth.implicitHeight + bluetooth.anchors.topMargin + (repeater.count > 0 ? devices.implicitHeight + devices.anchors.topMargin : 0)
 
     MaterialIcon {
         id: network
@@ -69,35 +68,7 @@ Item {
         }
     }
 
-    MaterialIcon {
-        id: battery
 
-        anchors.horizontalCenter: devices.horizontalCenter
-        anchors.top: repeater.count > 0 ? devices.bottom : bluetooth.bottom
-        anchors.topMargin: Appearance.spacing.smaller / 2
-
-        animate: true
-        text: {
-            if (!UPower.displayDevice.isLaptopBattery) {
-                if (PowerProfiles.profile === PowerProfile.PowerSaver)
-                    return "energy_savings_leaf";
-                if (PowerProfiles.profile === PowerProfile.Performance)
-                    return "rocket_launch";
-                return "balance";
-            }
-
-            const perc = UPower.displayDevice.percentage;
-            const charging = !UPower.onBattery;
-            if (perc === 1)
-                return charging ? "battery_charging_full" : "battery_full";
-            let level = Math.floor(perc * 7);
-            if (charging && (level === 4 || level === 1))
-                level--;
-            return charging ? `battery_charging_${(level + 3) * 10}` : `battery_${level}_bar`;
-        }
-        color: !UPower.onBattery || UPower.displayDevice.percentage > 0.2 ? root.colour : Colours.palette.m3error
-        fill: 1
-    }
 
     Behavior on implicitWidth {
         NumberAnimation {

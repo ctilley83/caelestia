@@ -1,6 +1,6 @@
 pragma Singleton
-
 import Quickshell
+import QtQml
 
 Singleton {
     property alias enabled: clock.enabled
@@ -11,6 +11,15 @@ Singleton {
 
     function format(fmt: string): string {
         return Qt.formatDateTime(clock.date, fmt);
+    }
+
+    function formatHourOnly(): string {
+        try {
+            return clock.date.toLocaleTimeString(Qt.locale("en_US"), "h a")
+        } catch (e) {
+            console.warn("formatHourOnly failed:", e);
+            return "";
+        }
     }
 
     SystemClock {

@@ -28,8 +28,6 @@ Item {
         const bls = statusIcons.y + statusIconsInner.y + statusIconsInner.bs - spacing / 2;
         const ble = statusIcons.y + statusIconsInner.y + statusIconsInner.be + spacing / 2;
 
-        const b = statusIconsInner.battery;
-        const by = statusIcons.y + statusIconsInner.y + b.y - spacing / 2;
 
         if (y >= awy && y <= awy + aw.implicitHeight) {
             popouts.currentName = "activewindow";
@@ -49,10 +47,6 @@ Item {
         } else if (y >= bls && y <= ble) {
             popouts.currentName = "bluetooth";
             popouts.currentCenter = Qt.binding(() => statusIcons.y + statusIconsInner.y + statusIconsInner.bs + (statusIconsInner.be - statusIconsInner.bs) / 2);
-            popouts.hasCurrent = true;
-        } else if (y >= by && y <= by + b.implicitHeight + spacing) {
-            popouts.currentName = "battery";
-            popouts.currentCenter = Qt.binding(() => statusIcons.y + statusIconsInner.y + b.y + b.implicitHeight / 2);
             popouts.hasCurrent = true;
         } else {
             popouts.hasCurrent = false;

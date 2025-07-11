@@ -25,9 +25,30 @@ Column {
         anchors.horizontalCenter: parent.horizontalCenter
 
         horizontalAlignment: StyledText.AlignHCenter
-        text: Time.format("hh\nmm")
+        text: Time.format("h\nmm\nAP")
+        font.pointSize: Appearance.font.size.smaller
+        font.family: Appearance.font.family.mono
+        color: root.colour
+    }
+
+    Rectangle {
+        width: parent.width * 0.8
+        height: 1
+        color: root.colour
+        anchors.horizontalCenter: parent.horizontalCenter
+        opacity: 0.6
+    }
+
+    StyledText {
+        id: dateText
+
+        anchors.horizontalCenter: parent.horizontalCenter
+
+        horizontalAlignment: StyledText.AlignHCenter
+        text: Time.format("ddd\nd")
         font.pointSize: Appearance.font.size.smaller
         font.family: Appearance.font.family.mono
         color: root.colour
     }
 }
+

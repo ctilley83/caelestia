@@ -52,20 +52,6 @@ WrapperItem {
             Layout.fillWidth: true
             spacing: Appearance.spacing.small
 
-            Loader {
-                Layout.alignment: Qt.AlignVCenter
-                Layout.fillWidth: true
-
-                active: UPower.displayDevice.isLaptopBattery
-                asynchronous: true
-
-                sourceComponent: StyledText {
-                    animate: true
-                    text: qsTr("%1%2 remaining").arg(UPower.onBattery ? "" : "(+) ").arg(UPower.displayDevice.percentage)
-                    color: !UPower.onBattery || UPower.displayDevice.percentage > 0.2 ? Colours.palette.m3onSurface : Colours.palette.m3error
-                }
-            }
-
             MaterialIcon {
                 Layout.alignment: Qt.AlignVCenter
 
@@ -74,40 +60,12 @@ WrapperItem {
                 font.pointSize: Appearance.font.size.large
             }
 
-            Loader {
-                Layout.alignment: Qt.AlignVCenter
-                Layout.fillWidth: true
-                Layout.maximumWidth: item?.implicitWidth ?? 0
-
-                active: !UPower.displayDevice.isLaptopBattery
-                asynchronous: true
-
-                sourceComponent: StyledText {
-                    animate: true
-                    text: Network.active?.ssid ?? ""
-                    font.pointSize: Appearance.font.size.normal
-                    elide: Text.ElideRight
-                }
-            }
-
             MaterialIcon {
                 Layout.alignment: Qt.AlignVCenter
 
                 animate: true
                 text: Bluetooth.powered ? "bluetooth" : "bluetooth_disabled"
                 font.pointSize: Appearance.font.size.large
-            }
-
-            Loader {
-                Layout.alignment: Qt.AlignVCenter
-                active: !UPower.displayDevice.isLaptopBattery
-                asynchronous: true
-
-                sourceComponent: StyledText {
-                    animate: true
-                    text: qsTr("%n device(s) connected", "", Bluetooth.devices.filter(d => d.connected).length)
-                    font.pointSize: Appearance.font.size.normal
-                }
             }
         }
 

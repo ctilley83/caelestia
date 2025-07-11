@@ -46,7 +46,7 @@ Singleton {
                 });
                 const rNetworks = root.networks;
 
-                const destroyed = rNetworks.filter(rn => !networks.find(n => n.frequency === rn.frequency && n.ssid === rn.ssid && n.bssid === rn.bssid));
+                const destroyed = rNetworks.filter(rn => !rNetworks.find(n => n.frequency === rn.frequency && n.ssid === rn.ssid && n.bssid === rn.bssid));
                 for (const network of destroyed)
                     rNetworks.splice(rNetworks.indexOf(network), 1).forEach(n => n.destroy());
 

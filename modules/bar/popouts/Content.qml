@@ -43,11 +43,6 @@ Item {
             source: "Bluetooth.qml"
         }
 
-        Popout {
-            name: "battery"
-            source: "Battery.qml"
-        }
-
         Repeater {
             model: ScriptModel {
                 values: [...SystemTray.items.values]

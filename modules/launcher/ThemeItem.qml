@@ -54,7 +54,7 @@ Item {
                 id: desc
                 text: root.modelData?.description ?? ""
                 font.pointSize: Appearance.font.size.small
-                color: Colours.alpha(Colours.palette.m3outline, true)
+                color: Colours.alpha(Colours.palette.m3onSurface, true)
                 elide: Text.ElideRight
                 width: root.width - icon.width - Appearance.rounding.normal * 2
                 anchors.top: name.bottom
