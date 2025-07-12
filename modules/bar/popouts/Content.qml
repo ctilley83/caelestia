@@ -32,7 +32,10 @@ Item {
                 wrapper: root.wrapper
             }
         }
-
+        Popout {
+            name: "wired_network"
+            source: "WiredNetwork.qml"
+        }
         Popout {
             name: "network"
             source: "Network.qml"

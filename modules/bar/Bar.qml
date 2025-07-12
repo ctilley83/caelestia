@@ -149,7 +149,7 @@ Item {
             anchors.left: parent.left
             anchors.right: parent.right
             anchors.bottom: power.top
-            anchors.bottomMargin: Appearance.spacing.normal
+            anchors.bottomMargin: Appearance.spacing.extraLarge
 
             radius: Appearance.rounding.full
             color: Colours.palette.m3surfaceContainer
@@ -168,6 +168,7 @@ Item {
 
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.bottom: parent.bottom
+            anchors.topMargin: Appearance.padding.extraLarge
             anchors.bottomMargin: Appearance.padding.large
         }
     }

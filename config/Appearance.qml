@@ -25,6 +25,7 @@ Singleton {
         readonly property int normal: 12
         readonly property int larger: 15
         readonly property int large: 20
+        readonly property int extraLarge: 40
     }
 
     component Padding: QtObject {
@@ -33,6 +34,7 @@ Singleton {
         readonly property int normal: 10
         readonly property int larger: 12
         readonly property int large: 15
+        readonly property int extraLarge: 30
     }
 
     component FontFamily: QtObject {

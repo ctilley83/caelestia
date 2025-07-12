@@ -9,6 +9,8 @@ Singleton {
 
     readonly property list<AccessPoint> networks: []
     readonly property AccessPoint active: networks.find(n => n.active) ?? null
+    readonly property list<EthernetConnection> wiredAdapters: []
+    readonly property EthernetConnection activeEthernet: wiredAdapters.find(n => n.connected) ?? null
 
     reloadableId: "network"
 
@@ -63,6 +65,45 @@ Singleton {
             }
         }
     }
+    Process {
+        id: getWiredStatus
+        running: true
+        command: ["nmcli", "-g", "DEVICE,STATE,IP4.ADDRESS", "device"]
+        environment: ({
+            LANG: "C",
+            LC_ALL: "C"
+        })
+        stdout: StdioCollector {
+            onStreamFinished: {
+                const lines = text.trim().split("\n").filter(l => l.startsWith("e"));
+                const adapters = lines.map(line => {
+                    const parts = line.split(":");
+                    return {
+                        device: parts[0],
+                        state: parts[1],
+                        ip: parts[2]?.split("/")[0] ?? ""
+                    };
+                });
+
+                const rAdapters = root.wiredAdapters;
+
+                const destroyed = rAdapters.filter(ra => !adapters.find(n => n.device === ra.device));
+                for (const eth of destroyed)
+                    rAdapters.splice(rAdapters.indexOf(eth), 1).forEach(n => n.destroy());
+
+                for (const adapter of adapters) {
+                    const match = rAdapters.find(n => n.device === adapter.device);
+                    if (match) {
+                        match.lastIpcObject = adapter;
+                    } else {
+                        rAdapters.push(ethComp.createObject(root, {
+                            lastIpcObject: adapter
+                        }));
+                    }
+                }
+            }
+        }
+    }
 
     component AccessPoint: QtObject {
         required property var lastIpcObject
@@ -71,6 +112,17 @@ Singleton {
         readonly property int strength: lastIpcObject.strength
         readonly property int frequency: lastIpcObject.frequency
         readonly property bool active: lastIpcObject.active
+    }
+    component EthernetConnection: QtObject {
+        required property var lastIpcObject
+        readonly property string device: lastIpcObject.device
+        readonly property string state: lastIpcObject.state
+        readonly property string ip: lastIpcObject.ip
+        readonly property bool connected: lastIpcObject.state === "connected"
+    }
+    Component {
+        id: ethComp
+        EthernetConnection {}
     }
 
     Component {
