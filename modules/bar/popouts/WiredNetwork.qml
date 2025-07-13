@@ -9,14 +9,14 @@ Column {
     spacing: Appearance.spacing.normal
 
     StyledText {
-        text: qsTr("Connected to: %1").arg(Network.active?.ssid ?? "None")
+        text: "in Reverse"
     }
 
     StyledText {
-        text: qsTr("Strength: %1/100").arg(Network.active?.strength ?? 0)
+        text: "knocker"
     }
 
     StyledText {
-        text: qsTr("Frequency: %1 MHz").arg(Network.active?.frequency ?? 0)
+        text:"fart"
     }
 }

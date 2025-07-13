@@ -17,20 +17,17 @@ Item {
     readonly property real be: repeater.count > 0 ? devices.y + devices.implicitHeight : bluetooth.y + bluetooth.implicitHeight
 
     clip: true
-    implicitWidth: Math.max(network.implicitWidth, bluetooth.implicitWidth, devices.implicitWidth)
+    implicitWidth: Math.max(network.implicitWidth, wired_network.implicitWidth, bluetooth.implicitWidth, devices.implicitWidth)
     implicitHeight: wired_network.implicitHeight + network.implicitHeight + bluetooth.implicitHeight + bluetooth.anchors.topMargin + (repeater.count > 0 ? devices.implicitHeight + devices.anchors.topMargin : 0)
     MaterialIcon {
         id: wired_network
-
         animate: true
         text: "lan"
         color: root.colour
-
         anchors.horizontalCenter: parent.horizontalCenter
     }
     MaterialIcon {
         id: network
-
         animate: true
         text: Network.active ? Icons.getNetworkIcon(Network.active.strength ?? 0) : "wifi_off"
         color: root.colour

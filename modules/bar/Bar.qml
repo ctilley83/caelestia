@@ -25,9 +25,11 @@ Item {
         const n = statusIconsInner.network;
         const ny = statusIcons.y + statusIconsInner.y + n.y - spacing / 2;
 
+        const w = statusIconsInner.wired_network; // <- Your wired network icon here
+        const wy = statusIcons.y + statusIconsInner.y + w.y - spacing / 2;
+
         const bls = statusIcons.y + statusIconsInner.y + statusIconsInner.bs - spacing / 2;
         const ble = statusIcons.y + statusIconsInner.y + statusIconsInner.be + spacing / 2;
-
 
         if (y >= awy && y <= awy + aw.implicitHeight) {
             popouts.currentName = "activewindow";
@@ -39,6 +41,10 @@ Item {
 
             popouts.currentName = `traymenu${index}`;
             popouts.currentCenter = Qt.binding(() => tray.y + item.y + item.implicitHeight / 2);
+            popouts.hasCurrent = true;
+        } else if (y >= wy && y <= wy + w.implicitHeight + spacing) {
+            popouts.currentName = "wired_network";
+            popouts.currentCenter = Qt.binding(() => statusIcons.y + statusIconsInner.y + w.y + w.implicitHeight / 2);
             popouts.hasCurrent = true;
         } else if (y >= ny && y <= ny + n.implicitHeight + spacing) {
             popouts.currentName = "network";
@@ -52,6 +58,7 @@ Item {
             popouts.hasCurrent = false;
         }
     }
+
 
     anchors.top: parent.top
     anchors.bottom: parent.bottom
@@ -77,10 +84,11 @@ Item {
         }
         Transparency {
             id: transparency
-
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.top: osIcon.bottom
             anchors.topMargin: Appearance.padding.large
+            anchors.bottomMargin: Appearance.padding.large
+
         }
         StyledRect {
             id: workspaces
@@ -132,7 +140,7 @@ Item {
 
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.bottom: clock.top
-            anchors.bottomMargin: Appearance.spacing.larger
+            anchors.bottomMargin: Appearance.spacing.extraLarge
         }
 
         Clock {
@@ -140,7 +148,7 @@ Item {
 
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.bottom: statusIcons.top
-            anchors.bottomMargin: Appearance.spacing.normal
+            anchors.bottomMargin: Appearance.spacing.extraLarge
         }
 
         StyledRect {
@@ -168,7 +176,6 @@ Item {
 
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.bottom: parent.bottom
-            anchors.topMargin: Appearance.padding.extraLarge
             anchors.bottomMargin: Appearance.padding.large
         }
     }
