@@ -235,21 +235,32 @@ Singleton {
         path: "/etc/os-release"
         onLoaded: {
             const lines = text().split("\n");
-            let osId = lines.find(l => l.startsWith("ID="))?.split("=")[1];
-            if (root.osIcons.hasOwnProperty(osId))
-                root.osIcon = root.osIcons[osId];
-            else {
-                const osIdLike = lines.find(l => l.startsWith("ID_LIKE="))?.split("=")[1];
-                if (osIdLike)
-                    for (const id of osIdLike.split(" "))
-                        if (root.osIcons.hasOwnProperty(id))
-                            return root.osIcon = root.osIcons[id];
+
+            function getValue(key) {
+                const line = lines.find(l => l.startsWith(key + "="));
+                if (!line) return "";
+                return line.split("=")[1].replace(/^"|"$/g, "").trim();
             }
 
-            let nameLine = lines.find(l => l.startsWith("PRETTY_NAME="));
-            if (!nameLine)
-                nameLine = lines.find(l => l.startsWith("NAME="));
-            root.osName = nameLine.split("=")[1].slice(1, -1);
+            let osId = getValue("ID").toLowerCase();
+            console.log("Detected osId:", osId);
+
+            if (root.osIcons.hasOwnProperty(osId)) {
+                root.osIcon = root.osIcons[osId];
+            } else {
+                const osIdLike = getValue("ID_LIKE").toLowerCase();
+                for (const id of osIdLike.split(" ")) {
+                    if (root.osIcons.hasOwnProperty(id)) {
+                        root.osIcon = root.osIcons[id];
+                        break;
+                    }
+                }
+            }
+
+            let osName = getValue("PRETTY_NAME") || getValue("NAME") || "Unknown";
+            root.osName = osName;
+            console.log("Detected osName:", osName);
         }
     }
+
 }

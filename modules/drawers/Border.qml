@@ -33,7 +33,6 @@ Item {
         anchors.fill: parent
         layer.enabled: true
         visible: false
-
         Rectangle {
             anchors.fill: parent
             anchors.margins: Config.border.thickness
@@ -41,4 +40,6 @@ Item {
             radius: Config.border.rounding
         }
     }
+
 }
+

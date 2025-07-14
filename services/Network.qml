@@ -21,7 +21,15 @@ Singleton {
             onRead: getNetworks.running = true
         }
     }
-
+    Process {
+        command: ["nmcli", "monitor"]
+        running: true
+        stdout: SplitParser {
+            onRead: {
+                getWiredStatus.running = true;
+            }
+        }
+    }
     Process {
         id: getNetworks
         running: true
@@ -35,7 +43,7 @@ Singleton {
                 const PLACEHOLDER = "STRINGWHICHHOPEFULLYWONTBEUSED";
                 const rep = new RegExp("\\\\:", "g");
                 const rep2 = new RegExp(PLACEHOLDER, "g");
-
+console.log("text wireless: ",text)
                 const networks = text.trim().split("\n").map(n => {
                     const net = n.replace(rep, PLACEHOLDER).split(":");
                     return {
@@ -47,7 +55,6 @@ Singleton {
                     };
                 });
                 const rNetworks = root.networks;
-
                 const destroyed = rNetworks.filter(rn => !rNetworks.find(n => n.frequency === rn.frequency && n.ssid === rn.ssid && n.bssid === rn.bssid));
                 for (const network of destroyed)
                     rNetworks.splice(rNetworks.indexOf(network), 1).forEach(n => n.destroy());
@@ -68,42 +75,48 @@ Singleton {
     Process {
         id: getWiredStatus
         running: true
-        command: ["nmcli", "-g", "DEVICE,STATE,IP4.ADDRESS", "device"]
+        command: ["nmcli", "device", "show", "eno1"]
         environment: ({
             LANG: "C",
             LC_ALL: "C"
         })
         stdout: StdioCollector {
             onStreamFinished: {
-                const lines = text.trim().split("\n").filter(l => l.startsWith("e"));
-                const adapters = lines.map(line => {
-                    const parts = line.split(":");
-                    return {
-                        device: parts[0],
-                        state: parts[1],
-                        ip: parts[2]?.split("/")[0] ?? ""
-                    };
-                });
+                console.log("Raw getWiredStatus output:\n" + text);
 
-                const rAdapters = root.wiredAdapters;
+                const lines = text.split("\n");
+                const ipLine = lines.find(l => l.includes("IP4.ADDRESS[1]:"));
+                const typeLine = lines.find(l => l.includes("GENERAL.TYPE:"));
+                console.log("type line is: ", typeLine);
+                const ip = ipLine?.split(":")[1]?.trim()?.split("/")[0] ?? "";
+                const type = typeLine?.split(":")[1]?.trim() ?? "";
+                console.log("type is:", type);
+                const entry = {
+                    device: "eno1",
+                    type: type,
+                    state: ip ? "connected" : "disconnected",
+                    ip
+                };
 
-                const destroyed = rAdapters.filter(ra => !adapters.find(n => n.device === ra.device));
-                for (const eth of destroyed)
-                    rAdapters.splice(rAdapters.indexOf(eth), 1).forEach(n => n.destroy());
-
-                for (const adapter of adapters) {
-                    const match = rAdapters.find(n => n.device === adapter.device);
-                    if (match) {
-                        match.lastIpcObject = adapter;
-                    } else {
-                        rAdapters.push(ethComp.createObject(root, {
-                            lastIpcObject: adapter
-                        }));
-                    }
+                const match = root.wiredAdapters.find(n => n.device === "eno1");
+                if (match) {
+                    match.lastIpcObject = entry;
+                } else {
+                    root.wiredAdapters.push(ethComp.createObject(root, {
+                        lastIpcObject: entry
+                    }));
                 }
+
+                console.log("Parsed wired adapter (eno1):", entry);
             }
         }
     }
+
+
+
+
+
+
 
     component AccessPoint: QtObject {
         required property var lastIpcObject
@@ -119,6 +132,7 @@ Singleton {
         readonly property string state: lastIpcObject.state
         readonly property string ip: lastIpcObject.ip
         readonly property bool connected: lastIpcObject.state === "connected"
+        readonly property string type: lastIpcObject.type   // 👈 Add this
     }
     Component {
         id: ethComp
@@ -127,7 +141,6 @@ Singleton {
 
     Component {
         id: apComp
-
         AccessPoint {}
     }
 }

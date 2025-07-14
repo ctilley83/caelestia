@@ -25,7 +25,6 @@ Variants {
 
         StyledWindow {
             id: win
-
             screen: scope.modelData
             name: "drawers"
             WlrLayershell.exclusionMode: ExclusionMode.Ignore

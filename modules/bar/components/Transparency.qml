@@ -20,7 +20,6 @@ MaterialIcon {
         radius: Appearance.rounding.full
 
         function onClicked(): void {
-            console.log("you made it here ya filthy animal");
             Colours.transparency.enabled = !Colours.transparency.enabled;
             Colours.persistTransparency();
         }

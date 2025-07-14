@@ -9,14 +9,14 @@ Column {
     spacing: Appearance.spacing.normal
 
     StyledText {
-        text: "in Reverse"
+        text: qsTr("IP: %1").arg(Network.activeEthernet?.ip ?? "None")
     }
 
     StyledText {
-        text: "knocker"
+        text: qsTr("Adapter: %1").arg(Network.activeEthernet?.device ?? "None")
     }
 
     StyledText {
-        text:"fart"
+        text: qsTr("Type: %1").arg(Network.activeEthernet?.type ?? "None")
     }
 }
