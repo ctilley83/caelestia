@@ -1,4 +1,4 @@
-import "root:/widgets"
+import qs.widgets
 import Quickshell
 import Quickshell.Wayland
 
@@ -14,12 +14,13 @@ Variants {
         name: "background"
         WlrLayershell.exclusionMode: ExclusionMode.Ignore
         WlrLayershell.layer: WlrLayer.Background
-        color: "transparent"
+        color: "black"
 
         anchors.top: true
         anchors.bottom: true
         anchors.left: true
         anchors.right: true
 
+        Wallpaper {}
     }
 }

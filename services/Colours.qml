@@ -1,7 +1,7 @@
 pragma Singleton
 
-import "root:/config"
-import "root:/utils"
+import qs.config
+import qs.utils
 import Quickshell
 import Quickshell.Io
 import QtQuick
@@ -90,7 +90,7 @@ Singleton {
 
 
     FileView {
-        path: `${Paths.state}/theme.json`
+        path: `${Paths.stringify(Paths.state)}/theme.json`
         watchChanges: true
         onFileChanged: reload()
         onLoaded: {

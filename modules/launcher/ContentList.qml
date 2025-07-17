@@ -1,9 +1,9 @@
 pragma ComponentBehavior: Bound
 
-import "root:/widgets"
-import "root:/services"
-import "root:/config"
-import "root:/utils"
+import qs.widgets
+import qs.services
+import qs.config
+import qs.utils
 import Quickshell
 import QtQuick
 import QtQuick.Controls
@@ -15,7 +15,9 @@ Item {
     required property TextField search
     required property int padding
     required property int rounding
-    readonly property Item currentList: appList.item
+
+    readonly property bool showWallpapers: search.text.startsWith(`${Config.launcher.actionPrefix}wallpaper `)
+    readonly property Item currentList: showWallpapers ? wallpaperList.item : appList.item
 
     anchors.horizontalCenter: parent.horizontalCenter
     anchors.bottom: parent.bottom

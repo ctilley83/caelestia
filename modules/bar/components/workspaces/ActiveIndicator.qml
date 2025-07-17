@@ -1,7 +1,7 @@
-import "root:/widgets"
-import "root:/services"
-import "root:/config"
-import "root:/modules/bar/components/workspaces" as WorkspaceModules
+import qs.widgets
+import qs.services
+import qs.config
+import qs.modules.bar.components.workspaces as WorkspaceModules
 import QtQuick
 import QtQuick.Effects
 

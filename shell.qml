@@ -10,6 +10,5 @@ import Quickshell
 ShellRoot {
     Drawers {}
     AreaPicker {}
-    Lock {}
     Shortcuts {}
 }

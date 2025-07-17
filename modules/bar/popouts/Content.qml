@@ -1,7 +1,7 @@
 pragma ComponentBehavior: Bound
 
-import "root:/services"
-import "root:/config"
+import qs.services
+import qs.config
 import Quickshell
 import Quickshell.Services.SystemTray
 import QtQuick
@@ -25,7 +25,10 @@ Item {
 
         anchors.fill: parent
         anchors.margins: Appearance.padding.large
-
+        Popout {
+            name: "bluetooth"
+            source: "Bluetooth.qml"
+        }
         Popout {
             name: "activewindow"
             sourceComponent: ActiveWindow {
@@ -41,10 +44,7 @@ Item {
             source: "Network.qml"
         }
 
-        Popout {
-            name: "bluetooth"
-            source: "Bluetooth.qml"
-        }
+
 
         Repeater {
             model: ScriptModel {

@@ -1,7 +1,7 @@
 pragma Singleton
 import "root:/utils/scripts/fuzzysort.js" as Fuzzy
-import "root:/config"
-import "root:/services"
+import qs.config
+import qs.services
 import Quickshell
 import Quickshell.Io
 import QtQuick
@@ -63,6 +63,12 @@ Singleton {
             icon: "palette"
             name: "Deep Current"
             description: "Deep enough to crush a carbon fiber submarine"
+        },
+        Theme {
+            theme: "BrightLight.json"
+            icon: "palette"
+            name: "Bright Light"
+            description: "It's bright, it's light, it's a delight"
         }
     ]
 

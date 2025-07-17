@@ -1,9 +1,9 @@
 pragma ComponentBehavior: Bound
 
-import "root:/widgets"
-import "root:/services"
-import "root:/utils"
-import "root:/config"
+import qs.widgets
+import qs.services
+import qs.utils
+import qs.config
 import QtQuick
 
 Item {
@@ -16,13 +16,13 @@ Item {
     implicitWidth: child.implicitWidth
     implicitHeight: child.implicitHeight
 
-    MouseArea {
+    CustomMouseArea {
         anchors.top: parent.top
         anchors.bottom: child.top
         anchors.left: parent.left
         anchors.right: parent.right
 
-        onWheel: event => {
+        function onWheel(event: WheelEvent): void {
             if (event.angleDelta.y > 0)
                 Audio.setVolume(Audio.volume + 0.1);
             else if (event.angleDelta.y < 0)
@@ -30,13 +30,13 @@ Item {
         }
     }
 
-    MouseArea {
+    CustomMouseArea {
         anchors.top: child.bottom
         anchors.bottom: parent.bottom
         anchors.left: parent.left
         anchors.right: parent.right
 
-        onWheel: event => {
+        function onWheel(event: WheelEvent): void {
             const monitor = root.monitor;
             if (event.angleDelta.y > 0)
                 monitor.setBrightness(monitor.brightness + 0.1);

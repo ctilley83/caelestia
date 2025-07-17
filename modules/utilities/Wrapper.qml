@@ -1,11 +1,10 @@
 import qs.config
-import Quickshell
 import QtQuick
 
 Item {
     id: root
 
-    required property PersistentProperties visibilities
+    required property bool visibility
 
     visible: height > 0
     implicitHeight: 0
@@ -13,7 +12,7 @@ Item {
 
     states: State {
         name: "visible"
-        when: root.visibilities.launcher
+        when: root.visibility
 
         PropertyChanges {
             root.implicitHeight: content.implicitHeight
@@ -49,7 +48,5 @@ Item {
 
     Content {
         id: content
-
-        visibilities: root.visibilities
     }
 }

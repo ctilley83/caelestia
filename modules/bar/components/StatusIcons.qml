@@ -1,8 +1,9 @@
-import "root:/widgets"
-import "root:/services"
-import "root:/utils"
-import "root:/config"
+import qs.widgets
+import qs.services
+import qs.utils
+import qs.config
 import Quickshell
+import Quickshell.Bluetooth
 import Quickshell.Services.UPower
 import QtQuick
 
@@ -11,70 +12,71 @@ Item {
 
     property color colour: Colours.palette.m3secondary
 
-    readonly property Item network: network
+    // Expose internal icon references for popout hover logic
+    readonly property Item bluetooth: bluetooth
     readonly property Item wired_network: wired_network
+    readonly property Item network: network
     readonly property real bs: bluetooth.y
     readonly property real be: repeater.count > 0 ? devices.y + devices.implicitHeight : bluetooth.y + bluetooth.implicitHeight
 
     clip: true
-    implicitWidth: Math.max(network.implicitWidth, wired_network.implicitWidth, bluetooth.implicitWidth, devices.implicitWidth)
-    implicitHeight: wired_network.implicitHeight + network.implicitHeight + bluetooth.implicitHeight + bluetooth.anchors.topMargin + (repeater.count > 0 ? devices.implicitHeight + devices.anchors.topMargin : 0)
-    MaterialIcon {
-        id: wired_network
-        animate: true
-        text: "lan"
-        color: root.colour
-        anchors.horizontalCenter: parent.horizontalCenter
-    }
-    MaterialIcon {
-        id: network
-        animate: true
-        text: Network.active ? Icons.getNetworkIcon(Network.active.strength ?? 0) : "wifi_off"
-        color: root.colour
-        anchors.top: wired_network.bottom
-        anchors.horizontalCenter: parent.horizontalCenter
-    }
 
-    MaterialIcon {
-        id: bluetooth
-
-        anchors.horizontalCenter: network.horizontalCenter
-        anchors.top: network.bottom
-        anchors.topMargin: Appearance.spacing.smaller / 2
-
-        animate: true
-        text: Bluetooth.powered ? "bluetooth" : "bluetooth_disabled"
-        color: root.colour
-    }
+    implicitWidth: iconsLayout.implicitWidth
+    implicitHeight: iconsLayout.implicitHeight
 
     Column {
-        id: devices
+        id: iconsLayout
+        anchors.centerIn: parent
+        spacing: Appearance.spacing.smaller // More spacing between icons
+        topPadding: Appearance.spacing.larger
+        bottomPadding: Appearance.spacing.larger
 
-        anchors.horizontalCenter: bluetooth.horizontalCenter
-        anchors.top: bluetooth.bottom
-        anchors.topMargin: Appearance.spacing.smaller / 2
+        MaterialIcon {
+            id: bluetooth
+            animate: true
+            text: Bluetooth.powered ? "bluetooth" : "bluetooth_disabled"
+            color: root.colour
+            anchors.horizontalCenter: parent.horizontalCenter
+        }
 
-        spacing: Appearance.spacing.smaller / 2
+        Column {
+            id: devices
+            anchors.horizontalCenter: parent.horizontalCenter
+            spacing: Appearance.spacing.smaller
 
-        Repeater {
-            id: repeater
+            Repeater {
+                id: repeater
 
-            model: ScriptModel {
-                values: Bluetooth.devices.filter(d => d.connected)
-            }
+                model: ScriptModel {
+                    values: Bluetooth.devices.filter(d => d.connected)
+                }
 
-            MaterialIcon {
-                required property Bluetooth.Device modelData
-
-                animate: true
-                text: Icons.getBluetoothIcon(modelData.icon)
-                color: root.colour
-                fill: 1
+                MaterialIcon {
+                    required property Bluetooth.Device modelData
+                    animate: true
+                    text: Icons.getBluetoothIcon(modelData.icon)
+                    color: root.colour
+                    fill: 1
+                }
             }
         }
+
+        MaterialIcon {
+            id: wired_network
+            animate: true
+            text: "lan"
+            color: root.colour
+            anchors.horizontalCenter: parent.horizontalCenter
+        }
+
+        MaterialIcon {
+            id: network
+            animate: true
+            text: Network.active ? Icons.getNetworkIcon(Network.active.strength ?? 0) : "wifi_off"
+            color: root.colour
+            anchors.horizontalCenter: parent.horizontalCenter
+        }
     }
-
-
 
     Behavior on implicitWidth {
         NumberAnimation {

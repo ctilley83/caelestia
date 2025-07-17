@@ -1,8 +1,8 @@
 pragma ComponentBehavior: Bound
 
-import "root:/widgets"
-import "root:/services"
-import "root:/config"
+import qs.widgets
+import qs.services
+import qs.config
 import QtQuick
 import QtQuick.Effects
 
@@ -33,6 +33,7 @@ Item {
         anchors.fill: parent
         layer.enabled: true
         visible: false
+
         Rectangle {
             anchors.fill: parent
             anchors.margins: Config.border.thickness
@@ -40,6 +41,4 @@ Item {
             radius: Config.border.rounding
         }
     }
-
 }
-

@@ -1,7 +1,7 @@
 pragma Singleton
 pragma ComponentBehavior: Bound
 
-import "root:/widgets"
+import qs.widgets
 import Quickshell
 import Quickshell.Io
 import QtQuick
@@ -14,100 +14,95 @@ Singleton {
 
     function getMonitorForScreen(screen: ShellScreen): var {
         return monitors.find(m => m.modelData === screen);
+}
+
+function increaseBrightness(): void {
+    const focusedName = Hyprland.focusedMonitor.name;
+    const monitor = monitors.find(m => focusedName === m.modelData.name);
+    if (monitor)
+        monitor.setBrightness(monitor.brightness + 0.1);
+}
+
+function decreaseBrightness(): void {
+    const focusedName = Hyprland.focusedMonitor.name;
+    const monitor = monitors.find(m => focusedName === m.modelData.name);
+    if (monitor)
+        monitor.setBrightness(monitor.brightness - 0.1);
+}
+
+reloadableId: "brightness"
+
+onMonitorsChanged: {
+    ddcMonitors = [];
+    ddcProc.running = true;
+}
+
+Variants {
+    id: variants
+
+    model: Quickshell.screens
+
+    Monitor {}
+}
+
+Process {
+    id: ddcProc
+
+    command: ["ddcutil", "detect", "--brief"]
+    stdout: StdioCollector {
+        onStreamFinished: root.ddcMonitors = text.trim().split("\n\n").filter(d => d.startsWith("Display ")).map(d => ({
+            model: d.match(/Monitor:.*:(.*):.*/)[1],
+            busNum: d.match(/I2C bus:[ ]*\/dev\/i2c-([0-9]+)/)[1]
+        }))
     }
+}
 
-    function increaseBrightness(): void {
-        const focusedName = Hyprland.focusedMonitor.name;
-        const monitor = monitors.find(m => focusedName === m.modelData.name);
-        if (monitor)
-            monitor.setBrightness(monitor.brightness + 0.1);
-    }
+CustomShortcut {
+    name: "brightnessUp"
+    description: "Increase brightness"
+    onPressed: root.increaseBrightness()
+}
 
-    function decreaseBrightness(): void {
-        const focusedName = Hyprland.focusedMonitor.name;
-        const monitor = monitors.find(m => focusedName === m.modelData.name);
-        if (monitor)
-            monitor.setBrightness(monitor.brightness - 0.1);
-    }
+CustomShortcut {
+    name: "brightnessDown"
+    description: "Decrease brightness"
+    onPressed: root.decreaseBrightness()
+}
 
-    reloadableId: "brightness"
+component Monitor: QtObject {
+    id: monitor
 
-    onMonitorsChanged: {
-        ddcMonitors = [];
-        ddcProc.running = true;
-    }
+    required property ShellScreen modelData
+    readonly property bool isDdc: root.ddcMonitors.some(m => m.model === modelData.model)
+    readonly property string busNum: root.ddcMonitors.find(m => m.model === modelData.model)?.busNum ?? ""
+    property real brightness
 
-    Variants {
-        id: variants
-
-        model: Quickshell.screens
-
-        Monitor {}
-    }
-
-    Process {
-        id: ddcProc
-
-        command: ["ddcutil", "detect", "--brief"]
+    readonly property Process initProc: Process {
         stdout: StdioCollector {
-            onStreamFinished: root.ddcMonitors = text.trim().split("\n\n").filter(d => d.startsWith("Display ")).map(d => ({
-                        model: d.match(/Monitor:.*:(.*):.*/)[1],
-                        busNum: d.match(/I2C bus:[ ]*\/dev\/i2c-([0-9]+)/)[1]
-                    }))
-        }
-    }
-
-    Process {
-        id: setProc
-    }
-
-    CustomShortcut {
-        name: "brightnessUp"
-        description: "Increase brightness"
-        onPressed: root.increaseBrightness()
-    }
-
-    CustomShortcut {
-        name: "brightnessDown"
-        description: "Decrease brightness"
-        onPressed: root.decreaseBrightness()
-    }
-
-    component Monitor: QtObject {
-        id: monitor
-
-        required property ShellScreen modelData
-        readonly property bool isDdc: root.ddcMonitors.some(m => m.model === modelData.model)
-        readonly property string busNum: root.ddcMonitors.find(m => m.model === modelData.model)?.busNum ?? ""
-        property real brightness
-
-        readonly property Process initProc: Process {
-            stdout: StdioCollector {
-                onStreamFinished: {
-                    const [, , , current, max] = text.split(" ");
-                    monitor.brightness = parseInt(current) / parseInt(max);
-                }
+            onStreamFinished: {
+                const [, , , current, max] = text.split(" ");
+                monitor.brightness = parseInt(current) / parseInt(max);
             }
         }
-
-        function setBrightness(value: real): void {
-            value = Math.max(0, Math.min(1, value));
-            const rounded = Math.round(value * 100);
-            if (Math.round(brightness * 100) === rounded)
-                return;
-            brightness = value;
-            setProc.command = isDdc ? ["ddcutil", "-b", busNum, "setvcp", "10", rounded] : ["brightnessctl", "s", `${rounded}%`];
-            setProc.startDetached();
-        }
-
-        onBusNumChanged: {
-            initProc.command = isDdc ? ["ddcutil", "-b", busNum, "getvcp", "10", "--brief"] : ["sh", "-c", `echo "a b c $(brightnessctl g) $(brightnessctl m)"`];
-            initProc.running = true;
-        }
-
-        Component.onCompleted: {
-            initProc.command = isDdc ? ["ddcutil", "-b", busNum, "getvcp", "10", "--brief"] : ["sh", "-c", `echo "a b c $(brightnessctl g) $(brightnessctl m)"`];
-            initProc.running = true;
-        }
     }
+
+    function setBrightness(value: real): void {
+        value = Math.max(0, Math.min(1, value));
+        const rounded = Math.round(value * 100);
+        if (Math.round(brightness * 100) === rounded)
+            return;
+        brightness = value;
+        Quickshell.execDetached(isDdc ? ["ddcutil", "-b", busNum, "setvcp", "10", rounded] : ["brightnessctl", "s", `${rounded}%`]);
+    }
+
+    onBusNumChanged: {
+        initProc.command = isDdc ? ["ddcutil", "-b", busNum, "getvcp", "10", "--brief"] : ["sh", "-c", `echo "a b c $(brightnessctl g) $(brightnessctl m)"`];
+        initProc.running = true;
+    }
+
+    Component.onCompleted: {
+        initProc.command = isDdc ? ["ddcutil", "-b", busNum, "getvcp", "10", "--brief"] : ["sh", "-c", `echo "a b c $(brightnessctl g) $(brightnessctl m)"`];
+        initProc.running = true;
+    }
+}
 }

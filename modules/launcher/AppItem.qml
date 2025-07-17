@@ -1,6 +1,6 @@
-import "root:/widgets"
-import "root:/services"
-import "root:/config"
+import qs.widgets
+import qs.services
+import qs.config
 import Quickshell
 import Quickshell.Widgets
 import QtQuick
@@ -60,9 +60,11 @@ Item {
 
                 text: (root.modelData?.comment || root.modelData?.genericName || root.modelData?.name) ?? ""
                 font.pointSize: Appearance.font.size.small
-                color: Colours.alpha(Colours.palette.m3onSurface, true)
+                color: Colours.alpha(Colours.palette.m3outline, true)
+
                 elide: Text.ElideRight
                 width: root.width - icon.width - Appearance.rounding.normal * 2
+
                 anchors.top: name.bottom
             }
         }

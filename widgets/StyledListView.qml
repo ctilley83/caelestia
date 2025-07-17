@@ -1,13 +1,14 @@
 import qs.config
 import QtQuick
 
-Rectangle {
+ListView {
     id: root
 
-    color: "transparent"
+    maximumFlickVelocity: 3000
 
-    Behavior on color {
-        ColorAnimation {
+    rebound: Transition {
+        NumberAnimation {
+            properties: "x,y"
             duration: Appearance.anim.durations.normal
             easing.type: Easing.BezierSpline
             easing.bezierCurve: Appearance.anim.curves.standard

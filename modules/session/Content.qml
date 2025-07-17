@@ -1,9 +1,9 @@
 pragma ComponentBehavior: Bound
 
-import "root:/widgets"
-import "root:/services"
-import "root:/config"
-import "root:/utils"
+import qs.widgets
+import qs.services
+import qs.config
+import qs.utils
 import Quickshell
 import QtQuick
 
@@ -52,13 +52,15 @@ Column {
         KeyNavigation.down: hibernate
     }
 
-Image {
+    AnimatedImage {
         width: Config.session.sizes.button
         height: Config.session.sizes.button
         sourceSize.width: width
         sourceSize.height: height
 
+        playing: visible
         asynchronous: true
+        speed: 0.7
         source: Paths.expandTilde(Config.paths.sessionGif)
     }
 

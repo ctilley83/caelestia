@@ -1,0 +1,83 @@
+{
+  "m3primary_paletteKeyColor": "#FF4081",
+  "m3secondary_paletteKeyColor": "#00E5FF",
+  "m3tertiary_paletteKeyColor": "#7C4DFF",
+  "m3neutral_paletteKeyColor": "#E0E0E0",
+  "m3neutral_variant_paletteKeyColor": "#BDBDBD",
+
+  "m3background": "#FFFFFF",
+  "m3onBackground": "#212121",
+  "m3surface": "#F9FAFB",
+  "m3surfaceDim": "#F0F0F0",
+  "m3surfaceBright": "#FFFFFF",
+  "m3surfaceContainerLowest": "#FAFAFA",
+  "m3surfaceContainerLow": "#F5F5F5",
+  "m3surfaceContainer": "#EEEEEE",
+  "m3surfaceContainerHigh": "#E0E0E0",
+  "m3surfaceContainerHighest": "#D6D6D6",
+
+  "m3onSurface": "#212121",
+  "m3surfaceVariant": "#E5E5E5",
+  "m3onSurfaceVariant": "#424242",
+  "m3inverseSurface": "#212121",
+  "m3inverseOnSurface": "#FAFAFA",
+
+  "m3outline": "#BDBDBD",
+  "m3outlineVariant": "#D6D6D6",
+
+  "m3shadow": "#000000",
+  "m3scrim": "#000000",
+
+  "m3surfaceTint": "#FF4081",
+
+  "m3primary": "#FF4081",
+  "m3onPrimary": "#FFFFFF",
+  "m3primaryContainer": "#FFD1DC",
+  "m3onPrimaryContainer": "#880E4F",
+  "m3inversePrimary": "#F50057",
+
+  "m3secondary": "#00E5FF",
+  "m3onSecondary": "#000000",
+  "m3secondaryContainer": "#B2FEFF",
+  "m3onSecondaryContainer": "#004D40",
+
+  "m3tertiary": "#7C4DFF",
+  "m3onTertiary": "#FFFFFF",
+  "m3tertiaryContainer": "#D1C4E9",
+  "m3onTertiaryContainer": "#311B92",
+
+  "m3error": "#E53935",
+  "m3onError": "#FFFFFF",
+  "m3errorContainer": "#FFCDD2",
+  "m3onErrorContainer": "#B71C1C",
+
+  "m3primaryFixed": "#FFE4EC",
+  "m3primaryFixedDim": "#FF80AB",
+  "m3onPrimaryFixed": "#880E4F",
+  "m3onPrimaryFixedVariant": "#F50057",
+
+  "m3secondaryFixed": "#E0FFFF",
+  "m3secondaryFixedDim": "#80DEEA",
+  "m3onSecondaryFixed": "#006064",
+  "m3onSecondaryFixedVariant": "#00ACC1",
+
+  "m3tertiaryFixed": "#ECE0FB",
+  "m3tertiaryFixedDim": "#B388FF",
+  "m3onTertiaryFixed": "#4527A0",
+  "m3onTertiaryFixedVariant": "#7E57C2",
+
+  "rosewater": "#FFE4E1",
+  "flamingo": "#FFB3B3",
+  "pink": "#FF80AB",
+  "mauve": "#D1C4E9",
+  "red": "#FF5252",
+  "maroon": "#AD1457",
+  "peach": "#FFCCBC",
+  "yellow": "#FFEB3B",
+  "green": "#69F0AE",
+  "teal": "#1DE9B6",
+  "sky": "#80D8FF",
+  "sapphire": "#40C4FF",
+  "blue": "#448AFF",
+  "lavender": "#E1BEE7"
+}
