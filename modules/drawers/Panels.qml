@@ -6,7 +6,6 @@ import qs.modules.session as Session
 import qs.modules.launcher as Launcher
 import qs.modules.dashboard as Dashboard
 import qs.modules.bar.popouts as BarPopouts
-import qs.modules.utilities as Utilities
 import Quickshell
 import QtQuick
 
@@ -23,7 +22,6 @@ Item {
     readonly property Launcher.Wrapper launcher: launcher
     readonly property Dashboard.Wrapper dashboard: dashboard
     readonly property BarPopouts.Wrapper popouts: popouts
-    readonly property Utilities.Wrapper utilities: utilities
 
     anchors.fill: parent
     anchors.margins: Config.border.thickness
@@ -94,14 +92,5 @@ Item {
                 return off + diff;
             return off;
         }
-    }
-
-    Utilities.Wrapper {
-        id: utilities
-
-        visibility: root.visibilities.utilities
-
-        anchors.bottom: parent.bottom
-        anchors.right: parent.right
     }
 }

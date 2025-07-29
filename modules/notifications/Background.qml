@@ -41,12 +41,7 @@ ShapePath {
         relativeX: root.wrapper.height > 0 ? root.wrapper.width - root.rounding - root.fullHeightRounding : root.wrapper.width
         relativeY: 0
     }
-    PathArc {
-        relativeX: root.rounding
-        relativeY: root.rounding
-        radiusX: root.rounding
-        radiusY: root.rounding
-    }
+
 
     Behavior on fillColor {
         ColorAnimation {
